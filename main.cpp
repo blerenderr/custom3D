@@ -151,16 +151,20 @@ void handleUserInput(SDL_Event event, Input *movement) {
 
 void handleCameraMovement(Input *movement, Camera *cam) {
     if(movement->strafe_left) {
-        cam->cx -= 0.5;
+        cam->cz += 0.5*cos(cam->ty - PI/2.0);
+        cam->cx += 0.5*sin(cam->ty - PI/2.0);
     }
     if(movement->strafe_right) {
-        cam->cx += 0.5;
+        cam->cz += 0.5*cos(cam->ty + PI/2.0);
+        cam->cx += 0.5*sin(cam->ty + PI/2.0);
     }
     if(movement->forward) {
-        cam->cz += 0.5;
+        cam->cz += 0.5*cos(cam->ty); 
+        cam->cx += 0.5*sin(cam->ty);
     }
     if(movement->backward) {
-        cam->cz -= 0.5;
+        cam->cz -= 0.5*cos(cam->ty); 
+        cam->cx -= 0.5*sin(cam->ty);
     }
     if(movement->up) {
         cam->cy += 0.5;
@@ -169,10 +173,10 @@ void handleCameraMovement(Input *movement, Camera *cam) {
         cam->cy -= 0.5;
     }
     if(movement->look_left) {
-        cam->ty -= ONE_DEGREE;
+        cam->ty -= 2.0*ONE_DEGREE;
     }
     if(movement->look_right) {
-        cam-> ty += ONE_DEGREE;
+        cam->ty += 2.0*ONE_DEGREE;
     }
 }
 // precondition: points are gaurenteed to be in range of displaySurface.
@@ -181,7 +185,7 @@ void lineDrawHelper(int x1, int y1, int x2, int y2, bool displaySurface[][SCREEN
     int relX = 0; int relY = 0;
     if(delX != 0) {
         float slope = (float)delY/delX;
-        while(relX != delX) {
+        while(relX != delX && ((slope <= 1 && slope > -1) || (slope >= 1 && slope < -1))) {
             relY = slope*relX;
             displaySurface[y1+relY][x1+relX] = true;
             if(delX < 0) {
@@ -189,6 +193,18 @@ void lineDrawHelper(int x1, int y1, int x2, int y2, bool displaySurface[][SCREEN
             }
             else {
                 relX++;
+            }
+        }
+        // not sure why this trickery works but it does
+        // there might be some lines drawn twice which should be fixed later
+        while(relY != delY && ((slope >= -1 || slope < 1) || (slope <= -1 || slope > 1))) {
+            relX = 1/slope*relY;
+            displaySurface[y1+relY][x1+relX] = true;
+            if(delY < 0) {
+                relY--;
+            }
+            else {
+                relY++;
             }
         }
     }
