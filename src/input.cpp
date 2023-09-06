@@ -1,6 +1,4 @@
-#include <SDL.h>
-#include <SDL_events.h>
-#include "main.h"
+#include "input.h"
 
 void handleUserInput(SDL_Event event, Input *movement) {
     switch(event.key.keysym.sym) {
@@ -132,15 +130,15 @@ void handleCameraMovement(Input *movement, Camera *cam) {
         cam->cy -= 0.5;
     }
     if(movement->look_left) {
-        cam->ty -= 2.0*ONE_DEGREE;
+        cam->ty -= 1.5*ONE_DEGREE;
     }
     if(movement->look_right) {
-        cam->ty += 2.0*ONE_DEGREE;
+        cam->ty += 1.5*ONE_DEGREE;
     }
     if(movement->look_up) {
-        cam->tx -= 2.0*ONE_DEGREE;
+        cam->tx -= 1.5*ONE_DEGREE;
     }
     if(movement->look_down) {
-        cam-> tx += 2.0*ONE_DEGREE;
+        cam-> tx += 1.5*ONE_DEGREE;
     }
 }

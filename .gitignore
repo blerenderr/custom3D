@@ -281,3 +281,16 @@ build/src/CMakeFiles/custom3D.dir/main.cpp.o
 build/src/CMakeFiles/custom3D.dir/main.cpp.o.d
 build/src/CMakeFiles/custom3D.dir/progress.make
 .cache/clangd/index/main.cpp.1545BC51D5AC8805.idx
+.DS_Store
+.cache/clangd/index/input.cpp.8DDBD8C5B9C203C2.idx
+.cache/clangd/index/input.h.5D0490D4CDB677DA.idx
+.cache/clangd/index/main.h.282DC20D3DE731FA.idx
+.cache/clangd/index/render.cpp.BF14745FA484C391.idx
+.cache/clangd/index/render.h.D2CB56287B47DABF.idx
+build/.cmake/api/v1/reply/index-2023-09-05T23-28-56-0554.json
+build/CMakeFiles/Progress/1
+build/CMakeFiles/Progress/2
+build/CMakeFiles/Progress/count.txt
+build/Testing/20230905-0738/Test.xml
+build/Testing/Temporary/LastTest_20230905-0738.log
+build/src/CMakeFiles/custom3D.dir/compiler_depend.internal
