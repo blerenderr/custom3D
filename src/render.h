@@ -30,7 +30,6 @@ struct Camera {
 };
 #endif
 
-
 void lineDrawHelper(int x1, int y1, int x2, int y2, bool displaySurface[][SCREEN_WIDTH]);
 
 void constructMatrix(Camera *cam, Poly polys[], bool displaySurface[][SCREEN_WIDTH]);
