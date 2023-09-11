@@ -3,3 +3,5 @@ A custom 3D projection program utilizing C++ and SDL2. The main formulae for tra
 Still very much a WiP and probably won't work well for a while.
 ## Future Ideas
 Add ability to import .mdl files or similar, distance culling, collision, eventually maybe vertex shading
+-> .obj file support added!
+working on clipping and culling right now.

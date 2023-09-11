@@ -1,5 +1,7 @@
 #include "input.h"
 
+const double SPEED_MODIFIER = 1;
+
 void handleUserInput(SDL_Event event, Input *movement) {
     switch(event.key.keysym.sym) {
         case 'w':
@@ -108,37 +110,37 @@ void handleUserInput(SDL_Event event, Input *movement) {
 
 void handleCameraMovement(Input *movement, Camera *cam) {
     if(movement->strafe_left) {
-        cam->cz += 0.5*cos(cam->ty - PI/2.0);
-        cam->cx += 0.5*sin(cam->ty - PI/2.0);
+        cam->cz += 1.5*SPEED_MODIFIER*cos(cam->ty - PI/2.0);
+        cam->cx += 1.5*SPEED_MODIFIER*sin(cam->ty - PI/2.0);
     }
     if(movement->strafe_right) {
-        cam->cz += 0.5*cos(cam->ty + PI/2.0);
-        cam->cx += 0.5*sin(cam->ty + PI/2.0);
+        cam->cz += 1.5*SPEED_MODIFIER*cos(cam->ty + PI/2.0);
+        cam->cx += 1.5*SPEED_MODIFIER*sin(cam->ty + PI/2.0);
     }
     if(movement->forward) {
-        cam->cz += 0.5*cos(cam->ty); 
-        cam->cx += 0.5*sin(cam->ty);
+        cam->cz += SPEED_MODIFIER*cos(cam->ty); 
+        cam->cx += SPEED_MODIFIER*sin(cam->ty);
     }
     if(movement->backward) {
-        cam->cz -= 0.5*cos(cam->ty); 
-        cam->cx -= 0.5*sin(cam->ty);
+        cam->cz -= SPEED_MODIFIER*cos(cam->ty); 
+        cam->cx -= SPEED_MODIFIER*sin(cam->ty);
     }
     if(movement->up) {
-        cam->cy += 0.5;
+        cam->cy += SPEED_MODIFIER;
     }
     if(movement->down) {
-        cam->cy -= 0.5;
+        cam->cy -= SPEED_MODIFIER;
     }
     if(movement->look_left) {
-        cam->ty -= 1.5*ONE_DEGREE;
+        cam->ty -= 2.4*SPEED_MODIFIER*ONE_DEGREE;
     }
     if(movement->look_right) {
-        cam->ty += 1.5*ONE_DEGREE;
+        cam->ty += 2.4*SPEED_MODIFIER*ONE_DEGREE;
     }
     if(movement->look_up) {
-        cam->tx -= 1.5*ONE_DEGREE;
+        cam->tx -= 2.0*SPEED_MODIFIER*ONE_DEGREE;
     }
     if(movement->look_down) {
-        cam-> tx += 1.5*ONE_DEGREE;
+        cam-> tx += 2.0*SPEED_MODIFIER*ONE_DEGREE;
     }
 }

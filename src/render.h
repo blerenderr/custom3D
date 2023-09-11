@@ -1,23 +1,12 @@
 #include <SDL.h>
 #include <SDL_video.h>
 #include <SDL_render.h>
+#include "model.h"
+
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
-const int VERTS_ARR_SIZE = 8;
-const int POLYS_ARR_SIZE = 12;
 
-struct Vec3 {
-    int x;
-    int y;
-    int z;
-};
-
-struct Poly {
-    Vec3 a;
-    Vec3 b;
-    Vec3 c;
-};
 #ifndef CAMERA_STRUCT
 #define CAMERA_STRUCT
 struct Camera {
@@ -30,8 +19,19 @@ struct Camera {
 };
 #endif
 
-void lineDrawHelper(int x1, int y1, int x2, int y2, bool displaySurface[][SCREEN_WIDTH]);
+struct Render {
+    Camera *cam;
+    std::vector<Mesh> meshes;
+    SDL_Renderer *pRenderer;
+    bool (*displaySurface)[SCREEN_WIDTH];
+    Render(Camera *cam, SDL_Renderer *pRenderer, bool displaySurface[SCREEN_HEIGHT][SCREEN_WIDTH]) {
+        this->cam = cam; this->pRenderer = pRenderer; this->displaySurface = displaySurface;
+        meshes = std::vector<Mesh>();
+    }
+    void addMesh(std::string filename);
+    void addMesh(std::string filename, Vec3 origin);
+    void drawLine(int x1, int y1, int x2, int y2);
+    void constructMatrix();
+    void drawMatrix();
 
-void constructMatrix(Camera *cam, Poly polys[], bool displaySurface[][SCREEN_WIDTH]);
-
-void drawMatrix(SDL_Renderer *pRenderer, bool displaySurface[][SCREEN_WIDTH]);
+};

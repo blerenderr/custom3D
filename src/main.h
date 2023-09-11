@@ -3,4 +3,5 @@
 #include <SDL_quit.h>
 #include <thread>
 #include <chrono>
-using namespace std;
+#include "input.h"
+#include "render.h"
