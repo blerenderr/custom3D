@@ -1,146 +1,172 @@
 #include "input.h"
 
-const double SPEED_MODIFIER = 1;
-
-void handleUserInput(SDL_Event event, Input *movement) {
-    switch(event.key.keysym.sym) {
-        case 'w':
-            switch(event.type) {
-                case SDL_KEYDOWN:
-                    movement->forward = true;
-                break;
-                case SDL_KEYUP:
-                    movement->forward = false;
-                break;
-            }
-        break;
-        case 's':
-            switch(event.type) {
-                case SDL_KEYDOWN:
-                    movement->backward = true;
-                break;
-                case SDL_KEYUP:
-                    movement->backward = false;
-                break;
-            }
-        break;
-        case 'a':
-            switch(event.type) {
-                case SDL_KEYDOWN:
-                    movement->strafe_left = true;
-                break;
-                case SDL_KEYUP:
-                    movement->strafe_left = false;
-                break;
-            }
-        break;
-        case 'd':
-            switch(event.type) {
-                case SDL_KEYDOWN:
-                    movement->strafe_right = true;
-                break;
-                case SDL_KEYUP:
-                    movement->strafe_right = false;
-                break;
-            }
-        break;
-        case ' ':
-            switch(event.type) {
-                case SDL_KEYDOWN:
-                    movement->up = true;
-                break;
-                case SDL_KEYUP:
-                    movement->up = false;
-                break;
-            }
-        break;
-        case 'c':
-            switch(event.type) {
-                case SDL_KEYDOWN:
-                    movement->down = true;
-                break;
-                case SDL_KEYUP:
-                    movement->down = false;
-                break;
-            }
-        break;
-        case 'l':
-            switch(event.type) {
-                case SDL_KEYDOWN:
-                    movement->look_left = true;
-                break;
-                case SDL_KEYUP:
-                    movement->look_left = false;
-                break;
-            }
-        break;
-        case '\'':
-            switch(event.type) {
-                case SDL_KEYDOWN:
-                    movement->look_right = true;
-                break;
-                case SDL_KEYUP:
-                    movement->look_right = false;
-                break;
-            }
-        break;
-        case 'p':
-            switch(event.type) {
-                case SDL_KEYDOWN:
-                    movement->look_up = true;
-                break;
-                case SDL_KEYUP:
-                    movement->look_up = false;
-                break;
-            }
-        break;
-        case ';':
-            switch(event.type) {
-                case SDL_KEYDOWN:
-                    movement->look_down = true;
-                break;
-                case SDL_KEYUP:
-                    movement->look_down = false;
-                break;
-            }
-        break;
+bool Input::handleUserInput() {
+    if(SDL_PollEvent(&event)) {
+        if(event.type == SDL_QUIT) {return false;}
+        switch(event.key.keysym.sym) {
+            case 'q':
+                return false;
+            case 'w':
+                switch(event.type) {
+                    case SDL_KEYDOWN:
+                        forward = true;
+                    break;
+                    case SDL_KEYUP:
+                        forward = false;
+                    break;
+                }
+            break;
+            case 's':
+                switch(event.type) {
+                    case SDL_KEYDOWN:
+                        backward = true;
+                    break;
+                    case SDL_KEYUP:
+                        backward = false;
+                    break;
+                }
+            break;
+            case 'a':
+                switch(event.type) {
+                    case SDL_KEYDOWN:
+                        strafe_left = true;
+                    break;
+                    case SDL_KEYUP:
+                        strafe_left = false;
+                    break;
+                }
+            break;
+            case 'd':
+                switch(event.type) {
+                    case SDL_KEYDOWN:
+                        strafe_right = true;
+                    break;
+                    case SDL_KEYUP:
+                        strafe_right = false;
+                    break;
+                }
+            break;
+            case ' ':
+                switch(event.type) {
+                    case SDL_KEYDOWN:
+                        up = true;
+                    break;
+                    case SDL_KEYUP:
+                        up = false;
+                    break;
+                }
+            break;
+            case 'c':
+                switch(event.type) {
+                    case SDL_KEYDOWN:
+                        down = true;
+                    break;
+                    case SDL_KEYUP:
+                        down = false;
+                    break;
+                }
+            break;
+            case 'l':
+                switch(event.type) {
+                    case SDL_KEYDOWN:
+                        look_left = true;
+                    break;
+                    case SDL_KEYUP:
+                        look_left = false;
+                    break;
+                }
+            break;
+            case '\'':
+                switch(event.type) {
+                    case SDL_KEYDOWN:
+                        look_right = true;
+                    break;
+                    case SDL_KEYUP:
+                        look_right = false;
+                    break;
+                }
+            break;
+            case 'p':
+                switch(event.type) {
+                    case SDL_KEYDOWN:
+                        look_up = true;
+                    break;
+                    case SDL_KEYUP:
+                        look_up = false;
+                    break;
+                }
+            break;
+            case ';':
+                switch(event.type) {
+                    case SDL_KEYDOWN:
+                        look_down = true;
+                    break;
+                    case SDL_KEYUP:
+                        look_down = false;
+                    break;
+                }
+            break;
+        }
     }
+    return true;
 
 }
 
-void handleCameraMovement(Input *movement, Camera *cam) {
-    if(movement->strafe_left) {
+void Input::lockAngles() {
+    if(cam->tx > PI/2) {cam->tx = PI/2;}
+    if(cam->tx < -PI/2) {cam->tx = -PI/2;}
+    if(cam->ty >= 2*PI) {cam->ty -= 2*PI;}
+    if(cam->ty < 0) {cam->ty += 2*PI;}
+}
+
+void Input::handleCameraMovement() {
+    bool changed = false;
+    if(strafe_left) {
         cam->cz += 1.5*SPEED_MODIFIER*cos(cam->ty - PI/2.0);
         cam->cx += 1.5*SPEED_MODIFIER*sin(cam->ty - PI/2.0);
+        changed = true;
     }
-    if(movement->strafe_right) {
+    if(strafe_right) {
         cam->cz += 1.5*SPEED_MODIFIER*cos(cam->ty + PI/2.0);
         cam->cx += 1.5*SPEED_MODIFIER*sin(cam->ty + PI/2.0);
+        changed = true;
     }
-    if(movement->forward) {
+    if(forward) {
         cam->cz += SPEED_MODIFIER*cos(cam->ty); 
         cam->cx += SPEED_MODIFIER*sin(cam->ty);
+        changed = true;
     }
-    if(movement->backward) {
+    if(backward) {
         cam->cz -= SPEED_MODIFIER*cos(cam->ty); 
         cam->cx -= SPEED_MODIFIER*sin(cam->ty);
+        changed = true;
     }
-    if(movement->up) {
+    if(up) {
         cam->cy += SPEED_MODIFIER;
+        changed = true;
     }
-    if(movement->down) {
+    if(down) {
         cam->cy -= SPEED_MODIFIER;
+        changed = true;
     }
-    if(movement->look_left) {
+    if(look_left) {
         cam->ty -= 2.4*SPEED_MODIFIER*ONE_DEGREE;
+        changed = true;
     }
-    if(movement->look_right) {
+    if(look_right) {
         cam->ty += 2.4*SPEED_MODIFIER*ONE_DEGREE;
+        changed = true;
     }
-    if(movement->look_up) {
+    if(look_up) {
         cam->tx -= 2.0*SPEED_MODIFIER*ONE_DEGREE;
+        changed = true;
     }
-    if(movement->look_down) {
-        cam-> tx += 2.0*SPEED_MODIFIER*ONE_DEGREE;
+    if(look_down) {
+        cam->tx += 2.0*SPEED_MODIFIER*ONE_DEGREE;
+        changed = true;
+    }
+    lockAngles();
+    if(changed) {
+        cam->updateUnitVectors();
     }
 }

@@ -1,35 +1,29 @@
 #include <SDL.h>
 #include <SDL_video.h>
 #include <SDL_render.h>
+#include <math.h>
 #include "model.h"
+#include "camera.h"
 
 
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
-
-#ifndef CAMERA_STRUCT
-#define CAMERA_STRUCT
-struct Camera {
-    //position
-    double cx; double cy; double cz;
-    //rotation
-    double tx; double ty; double tz;
-    //disp. surface pos (relative)
-    double ex; double ey; double ez;
-};
-#endif
+const int SCREEN_WIDTH = 1200; // 1200 def.
+const int SCREEN_HEIGHT = 800; // 800 def.
+const int MATRIX_TO_WINDOW_BORDER = 100; // size of border on every side of screen overlapping matrix
+const int MATRIX_WIDTH = SCREEN_WIDTH + MATRIX_TO_WINDOW_BORDER*2;
+const int MATRIX_HEIGHT = SCREEN_HEIGHT + MATRIX_TO_WINDOW_BORDER*2;
 
 struct Render {
     Camera *cam;
     std::vector<Mesh> meshes;
     SDL_Renderer *pRenderer;
-    bool (*displaySurface)[SCREEN_WIDTH];
-    Render(Camera *cam, SDL_Renderer *pRenderer, bool displaySurface[SCREEN_HEIGHT][SCREEN_WIDTH]) {
-        this->cam = cam; this->pRenderer = pRenderer; this->displaySurface = displaySurface;
+    bool (*displayMatrix)[MATRIX_WIDTH];
+    Render(Camera *cam, SDL_Renderer *pRenderer, bool displayMatrix[MATRIX_HEIGHT][MATRIX_WIDTH]) {
+        this->cam = cam; this->pRenderer = pRenderer; this->displayMatrix = displayMatrix;
         meshes = std::vector<Mesh>();
     }
     void addMesh(std::string filename);
     void addMesh(std::string filename, Vec3 origin);
+    bool isVisible(std::vector<Vec3> poly);
     void drawLine(int x1, int y1, int x2, int y2);
     void constructMatrix();
     void drawMatrix();

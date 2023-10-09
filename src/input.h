@@ -1,10 +1,13 @@
 #include <SDL.h>
 #include <SDL_events.h>
-
-const double PI = 3.14159265359;
+#include "camera.h"
+#define PI 3.14159265359
 const double ONE_DEGREE = PI/180;
+const double SPEED_MODIFIER = 2;
 
 struct Input {
+    SDL_Event event;
+    Camera *cam;
     bool strafe_left;
     bool strafe_right;
     bool forward;
@@ -15,20 +18,11 @@ struct Input {
     bool look_right;
     bool look_up;
     bool look_down;
+    Input(SDL_Event event, Camera *cam) {
+        this->event = event;
+        this->cam = cam;
+    }
+    bool handleUserInput();
+    void lockAngles();
+    void handleCameraMovement();
 };
-
-#ifndef CAMERA_STRUCT
-#define CAMERA_STRUCT
-struct Camera {
-    //position
-    double cx; double cy; double cz;
-    //rotation
-    double tx; double ty; double tz;
-    //disp. surface pos (relative)
-    double ex; double ey; double ez;
-};
-#endif
-
-void handleUserInput(SDL_Event event, Input *movement);
-
-void handleCameraMovement(Input *movement, Camera *cam);

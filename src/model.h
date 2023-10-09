@@ -2,16 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
-
-struct Vec3 {
-    double x;
-    double y;
-    double z;
-    Vec3() { x = 0; y = 0; z = 0; }
-    Vec3(double x, double y, double z) {
-        this->x = x; this->y = y; this->z = z;
-    }
-};
+#include "vec3.h"
 
 struct Mesh {
     std::vector<Vec3> vertices;

@@ -1,5 +1,4 @@
 #include "main.h"
-#include <chrono>
 using namespace std;
 
 void printDriverInfo() {
@@ -22,42 +21,36 @@ int main(int argc, char *argv[]) {
                                         SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     SDL_Renderer *pRenderer = SDL_CreateRenderer(pWindow, 0, SDL_RENDERER_SOFTWARE);
 
-    // input init
+    Camera cam(300, SCREEN_HEIGHT, SCREEN_WIDTH);
+
     SDL_Event event;
-    Input movement;
+    Input input(event, &cam);
+    bool displayMatrix[MATRIX_HEIGHT][MATRIX_WIDTH];
 
-    // render init
-    Camera cam;
-    cam.cx = 0.0; cam.cy = 0.0; cam.cz = 0.0;
-    cam.tx = 0.0; cam.ty = 0.0; cam.tz = 0.0;
-    cam.ex = 0.0; cam.ey = 0.0; cam.ez = 150.0; // dist. of display surface from camera point
-    bool displaySurface[SCREEN_HEIGHT][SCREEN_WIDTH];
+    Render render3D(&cam, pRenderer, displayMatrix);
 
-    Render render3D(&cam, pRenderer, displaySurface);
-
-    render3D.addMesh("monkey.obj", Vec3(0,0,50));
+    render3D.addMesh("monkey.obj", Vec3(0,0,70));
+    //render3D.addMesh("cube.obj", Vec3(0,59,72));
+    //render3D.addMesh("sphere.obj",Vec3(0,0,150));
     
     // main loop
     while (true) {
         chrono::time_point<chrono::steady_clock> timeStart = chrono::steady_clock::now();
-        for(int i = 0; i < SCREEN_HEIGHT; i++) {
-            for(int j = 0; j < SCREEN_WIDTH; j++) {
-                displaySurface[i][j] = false;
+        for(int i = 0; i < MATRIX_HEIGHT; i++) {
+            for(int j = 0; j < MATRIX_WIDTH; j++) {
+                displayMatrix[i][j] = false;
             }
         }
         SDL_SetRenderDrawColor(pRenderer, 0,0,0,0);
         SDL_RenderClear(pRenderer);
 
-		if (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-				break;
-			}
-            handleUserInput(event, &movement);
-		}
-        handleCameraMovement(&movement, &cam);
+        if(!input.handleUserInput()) {break;}
+        input.handleCameraMovement();
+
         render3D.constructMatrix();
         render3D.drawMatrix();
         SDL_RenderPresent(pRenderer);
+
         chrono::time_point<chrono::steady_clock> timeEnd = chrono::steady_clock::now();
         this_thread::sleep_for(chrono::milliseconds(16)-(timeEnd-timeStart));
 	}

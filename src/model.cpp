@@ -3,7 +3,7 @@
 void Mesh::readFile(std::string filename) {
     std::ifstream file(filename);
     std::string currLine;
-    while (file.is_open() && file.good()) { // ?
+    while (file.is_open() && file.good()) {
         getline(file,currLine);
         if(currLine.substr(0,1) == "v") { // is a vertex
             int pos1 = -1; int pos2 = -1;
