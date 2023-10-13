@@ -15,20 +15,24 @@ bool Render::isVisible(vector<Vec3> poly) {
         pointRel.z = camToPoint.dotProduct(cam->zDir);
         pointRel.y = camToPoint.dotProduct(cam->yDir);
         pointRel.x = camToPoint.dotProduct(cam->xDir);
+        // if one vert is too close or too far, then the whole poly is invalid
         if(pointRel.z > 500 || pointRel.z < 10) {
             return false;
         }
+        // if it fails height check, skip to next vert
         double height = pointRel.z*2*tan(cam->xFov*0.5);
-        if(pointRel.y > -height/2 && pointRel.y < height/2) {
-            return true;
+        if(pointRel.y < -height/2 || pointRel.y > height/2) {
+            continue;
         }
+        // if it fails width check, skip to next vert
         double width = pointRel.z*2*tan(cam->yFov*0.5);
-        if(pointRel.x > -width/2 && pointRel.x < width/2) {
-            return true;
+        if(pointRel.x < -width/2 || pointRel.x > width/2) {
+            continue;
         }
-
+        // if one vert passes
+        return true;
     }
-
+    // if no verts pass
     return false;
 }
 void Render::drawLine(int x1, int y1, int x2, int y2) {

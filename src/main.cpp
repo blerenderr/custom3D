@@ -1,4 +1,5 @@
 #include "main.h"
+#include <chrono>
 using namespace std;
 
 void printDriverInfo() {
@@ -52,7 +53,7 @@ int main(int argc, char *argv[]) {
         SDL_RenderPresent(pRenderer);
 
         chrono::time_point<chrono::steady_clock> timeEnd = chrono::steady_clock::now();
-        this_thread::sleep_for(chrono::milliseconds(16)-(timeEnd-timeStart));
+        this_thread::sleep_for(chrono::microseconds(16666)-(timeEnd-timeStart));
 	}
 
     SDL_DestroyRenderer(pRenderer);

@@ -1,6 +1,7 @@
 #include <math.h>
 #include "vec3.h"
 
+#define PI 3.14159265359
 #pragma once
 struct Camera {
     //position
