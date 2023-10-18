@@ -5,8 +5,11 @@ https://en.wikipedia.org/wiki/3D_projection#Mathematical_formula
 Culling solution taken from this page: https://www.lighthouse3d.com/tutorials/view-frustum-culling/radar-approach-testing-points/
 
 Still very much a WiP and probably won't work well for a while.
-## Future Ideas
-Add ability to import .mdl files or similar, distance culling, collision, eventually maybe vertex shading
+## Current Progress
+### Done:
+.obj file support, looks for the files in same dir as executable
 
--> .obj file support added!
-working on clipping and culling right now.
+has some clipping that works but is probably slower than it could be
+
+### Doing now:
+textures, viewmodels, UI, idk
