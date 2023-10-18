@@ -1,6 +1,7 @@
 #include <math.h>
 
 #pragma once
+
 struct Vec3 {
     double x;
     double y;

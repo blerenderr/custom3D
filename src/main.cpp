@@ -1,5 +1,4 @@
 #include "main.h"
-#include <chrono>
 using namespace std;
 
 void printDriverInfo() {
@@ -25,7 +24,7 @@ int main(int argc, char *argv[]) {
     Camera cam(300, SCREEN_HEIGHT, SCREEN_WIDTH);
 
     SDL_Event event;
-    Input input(event, &cam);
+    Input input(&event, &cam);
     bool displayMatrix[MATRIX_HEIGHT][MATRIX_WIDTH];
 
     Render render3D(&cam, pRenderer, displayMatrix);
@@ -33,7 +32,10 @@ int main(int argc, char *argv[]) {
     render3D.addMesh("monkey.obj", Vec3(0,0,70));
     //render3D.addMesh("cube.obj", Vec3(0,59,72));
     //render3D.addMesh("sphere.obj",Vec3(0,0,150));
+
+    UIElement fps(pRenderer, 0,0);
     
+    double deltaTime = 0.0;
     // main loop
     while (true) {
         chrono::time_point<chrono::steady_clock> timeStart = chrono::steady_clock::now();
@@ -50,9 +52,14 @@ int main(int argc, char *argv[]) {
 
         render3D.constructMatrix();
         render3D.drawMatrix();
+
+        fps.setNumber((int)min((1000000000/deltaTime), 60.0));
+        fps.draw();
+
         SDL_RenderPresent(pRenderer);
 
         chrono::time_point<chrono::steady_clock> timeEnd = chrono::steady_clock::now();
+        deltaTime = timeEnd.time_since_epoch().count() - timeStart.time_since_epoch().count();
         this_thread::sleep_for(chrono::microseconds(16666)-(timeEnd-timeStart));
 	}
 

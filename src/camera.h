@@ -1,8 +1,12 @@
 #include <math.h>
 #include "vec3.h"
-
-#define PI 3.14159265359
 #pragma once
+
+#ifndef PI_GUARD
+#define PI_GUARD
+const double PI = 3.14159265359;
+#endif
+
 struct Camera {
     //position
     double cx; double cy; double cz;

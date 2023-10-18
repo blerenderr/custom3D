@@ -7,9 +7,9 @@ void Render::addMesh(string filename) {
 void Render::addMesh(string filename, Vec3 origin) {
     meshes.insert(meshes.end(), Mesh(filename, origin));
 }
-bool Render::isVisible(vector<Vec3> poly) {
-    for(int i = 0; i < poly.size(); i++) {
-        Vec3 pointPos = poly.at(i);
+bool Render::isVisible(Vec3 poly[3]) {
+    for(int i = 0; i < 3; i++) {
+        Vec3 pointPos = poly[i];
         Vec3 pointRel;
         Vec3 camToPoint = pointPos.subtract(Vec3(cam->cx,cam->cy,cam->cz));
         pointRel.z = camToPoint.dotProduct(cam->zDir);
@@ -76,42 +76,51 @@ void Render::drawLine(int x1, int y1, int x2, int y2) {
     }
 }
 void Render::constructMatrix() {
+    // camera values
     double cx = cam->cx; double cy = cam->cy; double cz = cam->cz;
     double tx = cam->tx; double ty = cam->ty; double tz = cam->tz;
     double ex = cam->ex; double ey = cam->ey; double ez = cam->ez;
+    // formula variables
+    double ax; double ay; double az;
+    double dx; double dy; double dz;
+    double bx; double by;
+    int dispX; int dispY;
+    // each verts screen coord
+    int aDispX; int bDispX; int cDispX;
+    int aDispY; int bDispY; int cDispY;
     
     for(int m = 0; m < meshes.size(); m++) {
         Mesh *pCurrentMesh = &meshes.at(m);
 
         for(int p = 0; p < pCurrentMesh->indices.size(); p++) {
+            // this stores the index of each vert.
             Vec3 *pCurrentPoly = &pCurrentMesh->indices.at(p);
-            // formula variables
-            double ax; double ay; double az;
-            double dx; double dy; double dz;
-            double bx; double by;
-            int dispX; int dispY;
-            // end formula variables
-            int aDispX = -1; int bDispX = -1; int cDispX = -1;
-            int aDispY = -1; int bDispY = -1; int cDispY = -1;
+            ax = 0; ay = 0; az = 0;
+            dx = 0; dy = 0; dz = 0;
+            bx = 0; by = 0;
+            dispX = 0; dispY = 0;
+            aDispX = -1; bDispX = -1; cDispX = -1;
+            aDispY = -1; bDispY = -1; cDispY = -1;
 
-            vector<Vec3> poly;
-            poly.insert(poly.end(),Vec3(pCurrentMesh->vertices.at(pCurrentPoly->x-1).x + pCurrentMesh->origin.x,
-                                                    pCurrentMesh->vertices.at(pCurrentPoly->x-1).y + pCurrentMesh->origin.y,
-                                                    pCurrentMesh->vertices.at(pCurrentPoly->x-1).z + pCurrentMesh->origin.z));
+            // here the actual vertex values are fetched.
+            Vec3 poly[3];
+            poly[0] = Vec3(pCurrentMesh->vertices.at(pCurrentPoly->x-1).x + pCurrentMesh->origin.x,
+                           pCurrentMesh->vertices.at(pCurrentPoly->x-1).y + pCurrentMesh->origin.y,
+                           pCurrentMesh->vertices.at(pCurrentPoly->x-1).z + pCurrentMesh->origin.z);
 
-            poly.insert(poly.end(),Vec3(pCurrentMesh->vertices.at(pCurrentPoly->y-1).x + pCurrentMesh->origin.x,
-                                                    pCurrentMesh->vertices.at(pCurrentPoly->y-1).y + pCurrentMesh->origin.y,
-                                                    pCurrentMesh->vertices.at(pCurrentPoly->y-1).z + pCurrentMesh->origin.z));
+            poly[1] = Vec3(pCurrentMesh->vertices.at(pCurrentPoly->y-1).x + pCurrentMesh->origin.x,
+                           pCurrentMesh->vertices.at(pCurrentPoly->y-1).y + pCurrentMesh->origin.y,
+                           pCurrentMesh->vertices.at(pCurrentPoly->y-1).z + pCurrentMesh->origin.z);
 
-            poly.insert(poly.end(),Vec3(pCurrentMesh->vertices.at(pCurrentPoly->z-1).x + pCurrentMesh->origin.x,
-                                                    pCurrentMesh->vertices.at(pCurrentPoly->z-1).y + pCurrentMesh->origin.y,
-                                                    pCurrentMesh->vertices.at(pCurrentPoly->z-1).z + pCurrentMesh->origin.z));
+            poly[2] = Vec3(pCurrentMesh->vertices.at(pCurrentPoly->z-1).x + pCurrentMesh->origin.x,
+                           pCurrentMesh->vertices.at(pCurrentPoly->z-1).y + pCurrentMesh->origin.y,
+                           pCurrentMesh->vertices.at(pCurrentPoly->z-1).z + pCurrentMesh->origin.z);
 
             if(isVisible(poly)) {
                 // FIRST VERTEX
-                ax = poly.at(0).x;
-                ay = poly.at(0).y;
-                az = poly.at(0).z;
+                ax = poly[0].x;
+                ay = poly[0].y;
+                az = poly[0].z;
                 dx = cos(ty)*(sin(tz)*(ay-cy) + cos(tz)*(ax-cx)) - sin(ty)*(az-cz);
                 dy = sin(tx)*(cos(ty)*(az-cz) + sin(ty)*(sin(tz)*(ay-cy) + cos(tz)*(ax-cx))) + cos(tx)*(cos(tz)*(ay-cy) - sin(tz)*(ax-cx));
                 dz = cos(tx)*(cos(ty)*(az-cz) + sin(ty)*(sin(tz)*(ay-cy) + cos(tz)*(ax-cx))) - sin(tx)*(cos(tz)*(ay-cy) - sin(tz)*(ax-cx));
@@ -126,9 +135,9 @@ void Render::constructMatrix() {
                 }
 
                 // SECOND VERTEX
-                ax = poly.at(1).x;
-                ay = poly.at(1).y;
-                az = poly.at(1).z;
+                ax = poly[1].x;
+                ay = poly[1].y;
+                az = poly[1].z;
                 dx = cos(ty)*(sin(tz)*(ay-cy) + cos(tz)*(ax-cx)) - sin(ty)*(az-cz);
                 dy = sin(tx)*(cos(ty)*(az-cz) + sin(ty)*(sin(tz)*(ay-cy) + cos(tz)*(ax-cx))) + cos(tx)*(cos(tz)*(ay-cy) - sin(tz)*(ax-cx));
                 dz = cos(tx)*(cos(ty)*(az-cz) + sin(ty)*(sin(tz)*(ay-cy) + cos(tz)*(ax-cx))) - sin(tx)*(cos(tz)*(ay-cy) - sin(tz)*(ax-cx));
@@ -143,9 +152,9 @@ void Render::constructMatrix() {
                 }
 
                 // THIRD VERTEX
-                ax = poly.at(2).x;
-                ay = poly.at(2).y;
-                az = poly.at(2).z;
+                ax = poly[2].x;
+                ay = poly[2].y;
+                az = poly[2].z;
                 dx = cos(ty)*(sin(tz)*(ay-cy) + cos(tz)*(ax-cx)) - sin(ty)*(az-cz);
                 dy = sin(tx)*(cos(ty)*(az-cz) + sin(ty)*(sin(tz)*(ay-cy) + cos(tz)*(ax-cx))) + cos(tx)*(cos(tz)*(ay-cy) - sin(tz)*(ax-cx));
                 dz = cos(tx)*(cos(ty)*(az-cz) + sin(ty)*(sin(tz)*(ay-cy) + cos(tz)*(ax-cx))) - sin(tx)*(cos(tz)*(ay-cy) - sin(tz)*(ax-cx));

@@ -1,13 +1,13 @@
 #include "input.h"
 
 bool Input::handleUserInput() {
-    if(SDL_PollEvent(&event)) {
-        if(event.type == SDL_QUIT) {return false;}
-        switch(event.key.keysym.sym) {
+    if(SDL_PollEvent(event)) {
+        if(event->type == SDL_QUIT) {return false;}
+        switch(event->key.keysym.sym) {
             case 'q':
                 return false;
             case 'w':
-                switch(event.type) {
+                switch(event->type) {
                     case SDL_KEYDOWN:
                         forward = true;
                     break;
@@ -17,7 +17,7 @@ bool Input::handleUserInput() {
                 }
             break;
             case 's':
-                switch(event.type) {
+                switch(event->type) {
                     case SDL_KEYDOWN:
                         backward = true;
                     break;
@@ -27,7 +27,7 @@ bool Input::handleUserInput() {
                 }
             break;
             case 'a':
-                switch(event.type) {
+                switch(event->type) {
                     case SDL_KEYDOWN:
                         strafe_left = true;
                     break;
@@ -37,7 +37,7 @@ bool Input::handleUserInput() {
                 }
             break;
             case 'd':
-                switch(event.type) {
+                switch(event->type) {
                     case SDL_KEYDOWN:
                         strafe_right = true;
                     break;
@@ -47,7 +47,7 @@ bool Input::handleUserInput() {
                 }
             break;
             case ' ':
-                switch(event.type) {
+                switch(event->type) {
                     case SDL_KEYDOWN:
                         up = true;
                     break;
@@ -57,7 +57,7 @@ bool Input::handleUserInput() {
                 }
             break;
             case 'c':
-                switch(event.type) {
+                switch(event->type) {
                     case SDL_KEYDOWN:
                         down = true;
                     break;
@@ -67,7 +67,7 @@ bool Input::handleUserInput() {
                 }
             break;
             case 'l':
-                switch(event.type) {
+                switch(event->type) {
                     case SDL_KEYDOWN:
                         look_left = true;
                     break;
@@ -77,7 +77,7 @@ bool Input::handleUserInput() {
                 }
             break;
             case '\'':
-                switch(event.type) {
+                switch(event->type) {
                     case SDL_KEYDOWN:
                         look_right = true;
                     break;
@@ -87,7 +87,7 @@ bool Input::handleUserInput() {
                 }
             break;
             case 'p':
-                switch(event.type) {
+                switch(event->type) {
                     case SDL_KEYDOWN:
                         look_up = true;
                     break;
@@ -97,7 +97,7 @@ bool Input::handleUserInput() {
                 }
             break;
             case ';':
-                switch(event.type) {
+                switch(event->type) {
                     case SDL_KEYDOWN:
                         look_down = true;
                     break;

@@ -1,10 +1,9 @@
-#include <SDL.h>
-#include <SDL_video.h>
 #include <SDL_render.h>
 #include <math.h>
 #include "model.h"
 #include "camera.h"
 
+#pragma once
 
 const int SCREEN_WIDTH = 1200; // 1200 def.
 const int SCREEN_HEIGHT = 800; // 800 def.
@@ -23,7 +22,7 @@ struct Render {
     }
     void addMesh(std::string filename);
     void addMesh(std::string filename, Vec3 origin);
-    bool isVisible(std::vector<Vec3> poly);
+    bool isVisible(Vec3 poly[3]);
     void drawLine(int x1, int y1, int x2, int y2);
     void constructMatrix();
     void drawMatrix();
