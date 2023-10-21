@@ -29,9 +29,10 @@ int main(int argc, char *argv[]) {
 
     Render render3D(&cam, pRenderer, displayMatrix);
 
-    render3D.addMesh("monkey.obj", Vec3(0,0,70));
     //render3D.addMesh("cube.obj", Vec3(0,59,72));
-    //render3D.addMesh("sphere.obj",Vec3(0,0,150));
+    //render3D.addMesh("monkey.obj", Vec3(0,0,100), 1.0);
+    render3D.addMesh("sphere.obj",Vec3(0,-50,200), 1.0);
+    render3D.addMesh("plane.obj", Vec3(0,-100,0), 10.0);
 
     UIElement fps(pRenderer, 0,0);
     
@@ -39,11 +40,7 @@ int main(int argc, char *argv[]) {
     // main loop
     while (true) {
         chrono::time_point<chrono::steady_clock> timeStart = chrono::steady_clock::now();
-        for(int i = 0; i < MATRIX_HEIGHT; i++) {
-            for(int j = 0; j < MATRIX_WIDTH; j++) {
-                displayMatrix[i][j] = false;
-            }
-        }
+        render3D.clearViewableMatrix();
         SDL_SetRenderDrawColor(pRenderer, 0,0,0,0);
         SDL_RenderClear(pRenderer);
 

@@ -7,7 +7,7 @@
 
 const int SCREEN_WIDTH = 1200; // 1200 def.
 const int SCREEN_HEIGHT = 800; // 800 def.
-const int MATRIX_TO_WINDOW_BORDER = 100; // size of border on every side of screen overlapping matrix
+const int MATRIX_TO_WINDOW_BORDER = 500; // margin of window overlapping matrix in pixels
 const int MATRIX_WIDTH = SCREEN_WIDTH + MATRIX_TO_WINDOW_BORDER*2;
 const int MATRIX_HEIGHT = SCREEN_HEIGHT + MATRIX_TO_WINDOW_BORDER*2;
 
@@ -22,9 +22,11 @@ struct Render {
     }
     void addMesh(std::string filename);
     void addMesh(std::string filename, Vec3 origin);
+    void addMesh(std::string filename, Vec3 origin, double scale);
     bool isVisible(Vec3 poly[3]);
     void drawLine(int x1, int y1, int x2, int y2);
     void constructMatrix();
     void drawMatrix();
+    void clearViewableMatrix();
 
 };

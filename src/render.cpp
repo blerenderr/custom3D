@@ -7,6 +7,9 @@ void Render::addMesh(string filename) {
 void Render::addMesh(string filename, Vec3 origin) {
     meshes.insert(meshes.end(), Mesh(filename, origin));
 }
+void Render::addMesh(string filename, Vec3 origin, double scale) {
+    meshes.insert(meshes.end(), Mesh(filename, origin, scale));
+}
 bool Render::isVisible(Vec3 poly[3]) {
     for(int i = 0; i < 3; i++) {
         Vec3 pointPos = poly[i];
@@ -16,7 +19,7 @@ bool Render::isVisible(Vec3 poly[3]) {
         pointRel.y = camToPoint.dotProduct(cam->yDir);
         pointRel.x = camToPoint.dotProduct(cam->xDir);
         // if one vert is too close or too far, then the whole poly is invalid
-        if(pointRel.z > 500 || pointRel.z < 10) {
+        if(pointRel.z > 1500 || pointRel.z < 10) {
             return false;
         }
         // if it fails height check, skip to next vert
@@ -43,35 +46,20 @@ void Render::drawLine(int x1, int y1, int x2, int y2) {
         while(relX != delX && ((slope <= 1 && slope > -1) || (slope >= 1 && slope < -1))) {
             relY = slope*relX;
             displayMatrix[y1+relY][x1+relX] = true;
-            if(delX < 0) {
-                relX--;
-            }
-            else {
-                relX++;
-            }
+            delX < 0 ? relX-- : relX++;
         }
         // not sure why this trickery works but it does
         // there might be some lines drawn twice which should be fixed later
-        while(relY != delY && ((slope >= -1 || slope < 1) || (slope <= -1 || slope > 1))) {
+        while(relY != delY && ((slope >= -1 && slope < 1) || (slope <= -1 || slope > 1))) {
             relX = 1/slope*relY;
             displayMatrix[y1+relY][x1+relX] = true;
-            if(delY < 0) {
-                relY--;
-            }
-            else {
-                relY++;
-            }
+            delY < 0 ? relY-- : relY++;
         }
     }
     else { // vertical line
         while(relY != delY) {
             displayMatrix[y1+relY][x1+relX] = true;
-            if(delY < 0) {
-                relY--;
-            }
-            else {
-                relY++;
-            }
+            delY < 0 ? relY-- : relY++;
         }
     }
 }
@@ -104,17 +92,17 @@ void Render::constructMatrix() {
 
             // here the actual vertex values are fetched.
             Vec3 poly[3];
-            poly[0] = Vec3(pCurrentMesh->vertices.at(pCurrentPoly->x-1).x + pCurrentMesh->origin.x,
-                           pCurrentMesh->vertices.at(pCurrentPoly->x-1).y + pCurrentMesh->origin.y,
-                           pCurrentMesh->vertices.at(pCurrentPoly->x-1).z + pCurrentMesh->origin.z);
+            poly[0] = Vec3(pCurrentMesh->scale*pCurrentMesh->vertices.at(pCurrentPoly->x-1).x + pCurrentMesh->origin.x,
+                           pCurrentMesh->scale*pCurrentMesh->vertices.at(pCurrentPoly->x-1).y + pCurrentMesh->origin.y,
+                           pCurrentMesh->scale*pCurrentMesh->vertices.at(pCurrentPoly->x-1).z + pCurrentMesh->origin.z);
 
-            poly[1] = Vec3(pCurrentMesh->vertices.at(pCurrentPoly->y-1).x + pCurrentMesh->origin.x,
-                           pCurrentMesh->vertices.at(pCurrentPoly->y-1).y + pCurrentMesh->origin.y,
-                           pCurrentMesh->vertices.at(pCurrentPoly->y-1).z + pCurrentMesh->origin.z);
+            poly[1] = Vec3(pCurrentMesh->scale*pCurrentMesh->vertices.at(pCurrentPoly->y-1).x + pCurrentMesh->origin.x,
+                           pCurrentMesh->scale*pCurrentMesh->vertices.at(pCurrentPoly->y-1).y + pCurrentMesh->origin.y,
+                           pCurrentMesh->scale*pCurrentMesh->vertices.at(pCurrentPoly->y-1).z + pCurrentMesh->origin.z);
 
-            poly[2] = Vec3(pCurrentMesh->vertices.at(pCurrentPoly->z-1).x + pCurrentMesh->origin.x,
-                           pCurrentMesh->vertices.at(pCurrentPoly->z-1).y + pCurrentMesh->origin.y,
-                           pCurrentMesh->vertices.at(pCurrentPoly->z-1).z + pCurrentMesh->origin.z);
+            poly[2] = Vec3(pCurrentMesh->scale*pCurrentMesh->vertices.at(pCurrentPoly->z-1).x + pCurrentMesh->origin.x,
+                           pCurrentMesh->scale*pCurrentMesh->vertices.at(pCurrentPoly->z-1).y + pCurrentMesh->origin.y,
+                           pCurrentMesh->scale*pCurrentMesh->vertices.at(pCurrentPoly->z-1).z + pCurrentMesh->origin.z);
 
             if(isVisible(poly)) {
                 // FIRST VERTEX
@@ -184,6 +172,13 @@ void Render::drawMatrix() {
             if(displayMatrix[i][j]) {
                 SDL_RenderDrawPoint(pRenderer, j-MATRIX_TO_WINDOW_BORDER, i-MATRIX_TO_WINDOW_BORDER);
             }
+        }
+    }
+}
+void Render::clearViewableMatrix() {
+    for(int i = MATRIX_TO_WINDOW_BORDER; i < SCREEN_HEIGHT+MATRIX_TO_WINDOW_BORDER; i++) {
+        for(int j = MATRIX_TO_WINDOW_BORDER; j < SCREEN_WIDTH+MATRIX_TO_WINDOW_BORDER; j++) {
+            displayMatrix[i][j] = false;
         }
     }
 }
