@@ -1,4 +1,6 @@
 #include "main.h"
+#include "render.h"
+#include "ui.h"
 using namespace std;
 
 void printDriverInfo() {

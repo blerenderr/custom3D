@@ -1,4 +1,5 @@
 #include "camera.h"
+#include <iostream>
 
 void Camera::updateXfov(int screenHeight) {
     xFov = 2*atan(screenHeight/(ez));
@@ -7,11 +8,11 @@ void Camera::updateYfov(int screenWidth) {
     yFov = 2*atan(screenWidth/(ez));
 }
 void Camera::updateUnitVectors() {
-    // there is probably a better solution to this...
-    double x = sin(ty);
+    double z = cos(ty)*cos(tx);
+    double x = sin(ty)*cos(tx);
     double y = -sin(tx);
-    bool zIsNegative = (ty < 3*PI/2.0 && ty > PI/2.0);
-    zDir = Vec3(x, y, zIsNegative ? -abs(sqrt(1 - x*x - y*y)) : abs(sqrt(1 - x*x - y*y)));
+
+    zDir = Vec3(x, y, z);
     zDir.normalize();
     xDir = zDir.crossProduct(Vec3(0,1,0));
     xDir.normalize();
