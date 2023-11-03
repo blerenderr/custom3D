@@ -33,9 +33,9 @@ int main(int argc, char *argv[]) {
 
     //render3D.addMesh("cube.obj", Vec3(0,59,72));
     //render3D.addMesh("monkey.obj", Vec3(0,0,100), 1.0);
-    render3D.addMesh("sphere.obj",Vec3(0,-50,200), 1.0);
-    render3D.addMesh("plane.obj", Vec3(0,-100,0), 10.0);
-
+    //render3D.addMesh("sphere.obj",Vec3(0,-50,200), 1.0);
+    //render3D.addMesh("plane.obj", Vec3(0,-100,0), 10.0);
+    render3D.addMesh("snake.obj", Vec3(0,-100,50), 2.0);
     UIElement fps(pRenderer, 0,0);
     
     double deltaTime = 0.0;
@@ -43,11 +43,11 @@ int main(int argc, char *argv[]) {
     while (true) {
         chrono::time_point<chrono::steady_clock> timeStart = chrono::steady_clock::now();
         render3D.clearViewableMatrix();
-        SDL_SetRenderDrawColor(pRenderer, 0,0,0,0);
+        SDL_SetRenderDrawColor(pRenderer, 64,64,64,0);
         SDL_RenderClear(pRenderer);
 
         if(!input.handleUserInput()) {break;}
-        input.handleCameraMovement();
+        input.handleCameraMovement(deltaTime);
 
         render3D.constructMatrix();
         render3D.drawMatrix();

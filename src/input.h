@@ -28,5 +28,5 @@ struct Input {
     }
     bool handleUserInput();
     void lockAngles();
-    void handleCameraMovement();
+    void handleCameraMovement(double deltaTime);
 };

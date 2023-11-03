@@ -119,50 +119,51 @@ void Input::lockAngles() {
     if(cam->ty < 0) {cam->ty += 2*PI;}
 }
 
-void Input::handleCameraMovement() {
+void Input::handleCameraMovement(double deltaTime) {
+    double timeMod = fmax(deltaTime, 16666) * 0.00000006;
     bool changed = false;
     if(strafe_left) {
-        cam->cz += 1.5*SPEED_MODIFIER*cos(cam->ty - PI/2.0);
-        cam->cx += 1.5*SPEED_MODIFIER*sin(cam->ty - PI/2.0);
+        cam->cz += 1.5*SPEED_MODIFIER*cos(cam->ty - PI/2.0) * timeMod;
+        cam->cx += 1.5*SPEED_MODIFIER*sin(cam->ty - PI/2.0) * timeMod;
         changed = true;
     }
     if(strafe_right) {
-        cam->cz += 1.5*SPEED_MODIFIER*cos(cam->ty + PI/2.0);
-        cam->cx += 1.5*SPEED_MODIFIER*sin(cam->ty + PI/2.0);
+        cam->cz += 1.5*SPEED_MODIFIER*cos(cam->ty + PI/2.0) * timeMod;
+        cam->cx += 1.5*SPEED_MODIFIER*sin(cam->ty + PI/2.0) * timeMod;
         changed = true;
     }
     if(forward) {
-        cam->cz += SPEED_MODIFIER*cos(cam->ty); 
-        cam->cx += SPEED_MODIFIER*sin(cam->ty);
+        cam->cz += SPEED_MODIFIER*cos(cam->ty) * timeMod; 
+        cam->cx += SPEED_MODIFIER*sin(cam->ty) * timeMod;
         changed = true;
     }
     if(backward) {
-        cam->cz -= SPEED_MODIFIER*cos(cam->ty); 
-        cam->cx -= SPEED_MODIFIER*sin(cam->ty);
+        cam->cz -= SPEED_MODIFIER*cos(cam->ty) * timeMod; 
+        cam->cx -= SPEED_MODIFIER*sin(cam->ty) * timeMod;
         changed = true;
     }
     if(up) {
-        cam->cy += SPEED_MODIFIER;
+        cam->cy += SPEED_MODIFIER * timeMod;
         changed = true;
     }
     if(down) {
-        cam->cy -= SPEED_MODIFIER;
+        cam->cy -= SPEED_MODIFIER * timeMod;
         changed = true;
     }
     if(look_left) {
-        cam->ty -= 2.4*SPEED_MODIFIER*ONE_DEGREE;
+        cam->ty -= 2.4*SPEED_MODIFIER*ONE_DEGREE * timeMod;
         changed = true;
     }
     if(look_right) {
-        cam->ty += 2.4*SPEED_MODIFIER*ONE_DEGREE;
+        cam->ty += 2.4*SPEED_MODIFIER*ONE_DEGREE * timeMod;
         changed = true;
     }
     if(look_up) {
-        cam->tx -= 2.0*SPEED_MODIFIER*ONE_DEGREE;
+        cam->tx -= 2.0*SPEED_MODIFIER*ONE_DEGREE * timeMod;
         changed = true;
     }
     if(look_down) {
-        cam->tx += 2.0*SPEED_MODIFIER*ONE_DEGREE;
+        cam->tx += 2.0*SPEED_MODIFIER*ONE_DEGREE * timeMod;
         changed = true;
     }
     lockAngles();
