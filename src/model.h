@@ -2,13 +2,22 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include "vec3.h"
+#include "vec.h"
 
 #pragma once
 
+struct Texture {
+    int width;
+    int height;
+    Texture(std::string filename) {
+        
+    }
+};
 struct Mesh {
     std::vector<Vec3> vertices;
     std::vector<Vec3> indices;
+    std::vector<Vec2> textureCoords;
+    std::vector<Vec3> textureIndices; // taken from the same line as indices
     Vec3 origin;
     double scale;
     void readFile(std::string filename);

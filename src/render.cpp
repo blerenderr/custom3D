@@ -38,28 +38,67 @@ bool Render::isVisible(Vec3 poly[3]) {
     // if no verts pass
     return false;
 }
-void Render::drawLine(int x1, int y1, int x2, int y2) {
-    int delX = x2 - x1; int delY = y2 - y1;
-    int relX = 0; int relY = 0;
-    if(delX != 0) {
-        float slope = (float)delY/delX;
-        while(relX != delX && ((slope <= 1 && slope > -1) || (slope >= 1 && slope < -1))) {
-            relY = slope*relX;
-            displayMatrix[y1+relY][x1+relX] = true;
-            delX < 0 ? relX-- : relX++;
+void Render::bresenhamLow(int x1, int y1, int x2, int y2) {
+    // remember that everything here is multiplied by 2
+    int dx = x2 - x1;
+    int dy = y2 - y1;
+    int yi = 1;
+    if(dy < 0) {
+        yi = -1;
+        dy = -dy;
+    }
+    int diff = (2 * dy) - dx;
+    int y = y1;
+
+    for(int x = x1; x <= x2; x++) {
+        displayMatrix[y][x] = true;
+        if(diff > 0) {
+            y = y + yi;
+            diff += (2 * (dy - dx));
         }
-        // not sure why this trickery works but it does
-        // there might be some lines drawn twice which should be fixed later
-        while(relY != delY && ((slope >= -1 && slope < 1) || (slope <= -1 || slope > 1))) {
-            relX = 1/slope*relY;
-            displayMatrix[y1+relY][x1+relX] = true;
-            delY < 0 ? relY-- : relY++;
+        else {
+            diff += 2*dy;
         }
     }
-    else { // vertical line
-        while(relY != delY) {
-            displayMatrix[y1+relY][x1+relX] = true;
-            delY < 0 ? relY-- : relY++;
+}
+void Render::bresenhamHigh(int x1, int y1, int x2, int y2) {
+    // remember that everything here is multiplied by 2
+    int dx = x2 - x1;
+    int dy = y2 - y1;
+    int xi = 1;
+    if(dx < 0) {
+        xi = -1;
+        dx = -dx;
+    }
+    int diff = (2 * dx) - dy;
+    int x = x1;
+
+    for(int y = y1; y <= y2; y++) {
+        displayMatrix[y][x] = true;
+        if(diff > 0) {
+            x = x + xi;
+            diff += (2 * (dx - dy));
+        }
+        else {
+            diff += 2*dx;
+        }
+    }
+}
+void Render::drawLine(int x1, int y1, int x2, int y2) {
+    if(abs(y2 - y1) < abs(x2 - x1)) {
+        if(x1 > x2) {
+            bresenhamLow(x2, y2, x1, y1);
+        }
+        else {
+            bresenhamLow(x1, y1, x2, y2);
+        }
+    }
+    else {
+        if(y1 > y2) {
+            bresenhamHigh(x2, y2, x1, y1);
+        }
+        else {
+            bresenhamHigh(x1, y1, x2, y2);
         }
     }
 }

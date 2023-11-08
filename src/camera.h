@@ -1,5 +1,5 @@
 #include <math.h>
-#include "vec3.h"
+#include "vec.h"
 #pragma once
 
 #ifndef PI_GUARD

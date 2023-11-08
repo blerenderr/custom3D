@@ -16,3 +16,13 @@ struct Vec3 {
     Vec3 subtract(Vec3 other);
     void normalize();
 };
+
+struct Vec2 {
+    double x;
+    double y;
+    Vec2() { x = 0; y = 0; }
+    Vec2(double x, double y) {
+        this->x = x; this->y = y;
+    }
+    void normalize();
+};

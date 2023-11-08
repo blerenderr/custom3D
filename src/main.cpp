@@ -1,6 +1,4 @@
 #include "main.h"
-#include "render.h"
-#include "ui.h"
 using namespace std;
 
 void printDriverInfo() {
@@ -35,7 +33,14 @@ int main(int argc, char *argv[]) {
     //render3D.addMesh("monkey.obj", Vec3(0,0,100), 1.0);
     //render3D.addMesh("sphere.obj",Vec3(0,-50,200), 1.0);
     //render3D.addMesh("plane.obj", Vec3(0,-100,0), 10.0);
-    render3D.addMesh("snake.obj", Vec3(0,-100,50), 2.0);
+
+    render3D.addMesh("snake.obj", Vec3(0,-200,100), 2.4);
+    render3D.addMesh("plane.obj", Vec3(0,-200,100), 40.0);
+
+    //render3D.addMesh("measure_uv.obj", Vec3(0,0,10), 1.0);
+
+    
+
     UIElement fps(pRenderer, 0,0);
     
     double deltaTime = 0.0;

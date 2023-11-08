@@ -1,4 +1,4 @@
-#include "vec3.h"
+#include "vec.h"
 
 double Vec3::dotProduct(Vec3 other) {
     return this->x*other.x + this->y*other.y + this->z*other.z;
@@ -17,4 +17,10 @@ Vec3 Vec3::subtract(Vec3 other) {
 void Vec3::normalize() {
     double invsqrt = 1/sqrt(this->x*this->x + this->y*this->y + this->z*this->z);
     this->x *= invsqrt; this->y *= invsqrt; this->z *= invsqrt;
+}
+
+
+void Vec2::normalize() {
+    double invsqrt = 1/sqrt(this->x*this->x + this->y*this->y);
+    this->x *= invsqrt; this->y *= invsqrt;
 }
