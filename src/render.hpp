@@ -1,7 +1,7 @@
 #include <SDL_render.h>
 #include <math.h>
-#include "model.h"
-#include "camera.h"
+#include "model.hpp"
+#include "camera.hpp"
 
 #pragma once
 

@@ -2,7 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include "vec.h"
+#include "vec.hpp"
 
 #pragma once
 

@@ -1,4 +1,4 @@
-#include "render.h"
+#include "render.hpp"
 using namespace std;
 
 void Render::addMesh(string filename) {

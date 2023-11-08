@@ -1,5 +1,5 @@
 #include <SDL_events.h>
-#include "camera.h"
+#include "camera.hpp"
 
 #pragma once
 #ifndef PI_GUARD

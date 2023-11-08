@@ -1,4 +1,4 @@
-#include "model.h"
+#include "model.hpp"
 
 void Mesh::readFile(std::string filename) {
     std::ifstream file(filename);

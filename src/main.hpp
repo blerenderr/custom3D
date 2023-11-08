@@ -3,6 +3,6 @@
 #include <SDL_quit.h>
 #include <thread>
 #include <chrono>
-#include "input.h"
-#include "render.h"
-#include "ui.h"
+#include "input.hpp"
+#include "render.hpp"
+#include "ui.hpp"

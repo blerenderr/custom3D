@@ -1,4 +1,4 @@
-#include "camera.h"
+#include "camera.hpp"
 
 void Camera::updateXfov(int screenHeight) {
     xFov = 2*atan(screenHeight/(ez));
