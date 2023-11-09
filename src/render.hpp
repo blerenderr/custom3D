@@ -1,6 +1,6 @@
 #include <SDL_render.h>
 #include <math.h>
-#include "model.hpp"
+#include "mesh.hpp"
 #include "camera.hpp"
 
 #pragma once

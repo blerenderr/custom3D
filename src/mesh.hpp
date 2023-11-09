@@ -6,13 +6,6 @@
 
 #pragma once
 
-struct Texture {
-    int width;
-    int height;
-    Texture(std::string filename) {
-        
-    }
-};
 struct Mesh {
     std::vector<Vec3> vertices;
     std::vector<Vec3> indices;
