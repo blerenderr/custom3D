@@ -18,9 +18,15 @@ void Vec3::normalize() {
     double invsqrt = 1/sqrt(this->x*this->x + this->y*this->y + this->z*this->z);
     this->x *= invsqrt; this->y *= invsqrt; this->z *= invsqrt;
 }
+void Vec3::floorAll() {
+    this->x = floor(this->x); this->y = floor(this->y); this->z = floor(this->z);
+}
 
 
 void Vec2::normalize() {
     double invsqrt = 1/sqrt(this->x*this->x + this->y*this->y);
     this->x *= invsqrt; this->y *= invsqrt;
+}
+void Vec2::floorAll() {
+    this->x = floor(this->x); this->y = floor(this->y);
 }

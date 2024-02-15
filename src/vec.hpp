@@ -1,5 +1,4 @@
 #include <math.h>
-
 #pragma once
 
 struct Vec3 {
@@ -15,6 +14,7 @@ struct Vec3 {
     Vec3 add(Vec3 other);
     Vec3 subtract(Vec3 other);
     void normalize();
+    void floorAll();
 };
 
 struct Vec2 {
@@ -25,4 +25,5 @@ struct Vec2 {
         this->x = x; this->y = y;
     }
     void normalize();
+    void floorAll();
 };
